@@ -15,7 +15,7 @@ import toast from 'react-hot-toast';
 import { GetNotificationsApi } from './redux/slices/NotificationSlice';
 
 const App = () => {
-  const {isRole} = useSelector((state:any) => state.Slicer);
+  // const {isRole} = useSelector((state:any) => state.Slicer);
   const dispatch = useDispatch();
   const token = localStorage.getItem("NBUserToken");
   const {  userDetail } = useSelector((state: any) => state.GetUserDetailSlice);

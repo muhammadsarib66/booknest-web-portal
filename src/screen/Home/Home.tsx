@@ -2,7 +2,7 @@
 import Navbar from '../../components/Navbar';
 import { Routes, Route } from 'react-router-dom';
 import SelectedBookScreen from '../SelectedBookScreen';
-import Footer from '../../components/Footer';
+// import Footer from '../../components/Footer';
 import BooksMainScreen from './BooksMainScreen';
 import ChatScreen from '../communication/ChatScreen';
 import BookListingAdScreen from '../BookListingAdScreen';
@@ -14,7 +14,7 @@ import BookRequests from './BookRequests';
 import AllNotifications from '../AllNotifications';
 
 const Home = () => {
-const location = window.location.pathname; 
+// const location = window.location.pathname; 
   return (
     <>
       <Navbar />

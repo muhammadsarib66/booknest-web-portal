@@ -1,6 +1,6 @@
 import  { useEffect, useState } from 'react'
 import {heartIcon,
-notificationIcon,userImg,
+notificationIcon,
 searchIcon, 
 mainBigLogo,
 chevronIcon,
@@ -16,7 +16,6 @@ import { getUserDetailApi } from '../redux/slices/GetUserDetailSlice';
 import { GetSearchedBookApi } from '../redux/slices/BookSlice/BookSlicer';
 import SearchResults from './SearchResults';
 import { GetNotificationsApi } from '../redux/slices/NotificationSlice';
-import { CgLayoutGrid } from 'react-icons/cg';
 import moment from 'moment';
 
 const categories = ["All Categories", "Fiction", "Non-Fiction",  'Mystery', 'Science', 'Biography','others'];

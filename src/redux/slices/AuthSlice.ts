@@ -152,10 +152,10 @@ const AuthSlice = createSlice({
       builder.addCase(sendOtpApi.pending, (state) => {
         state.isLoading = true;
       })
-      builder.addCase(sendOtpApi.fulfilled, (state, action) => {
+      builder.addCase(sendOtpApi.fulfilled, (state) => {
         state.isLoading = false;
       })
-      builder.addCase(sendOtpApi.rejected, (state, action) => {
+      builder.addCase(sendOtpApi.rejected, (state) => {
         state.isLoading = false;
         state.isError = true;
       });
@@ -163,10 +163,10 @@ const AuthSlice = createSlice({
       builder.addCase(verifyOtpApi.pending, (state) => {
         state.isLoading = true;
       })
-      builder.addCase(verifyOtpApi.fulfilled, (state, action) => {
+      builder.addCase(verifyOtpApi.fulfilled, (state) => {
         state.isLoading = false;
       })
-      builder.addCase(verifyOtpApi.rejected, (state, action) => {
+      builder.addCase(verifyOtpApi.rejected, (state) => {
         state.isLoading = false;
         state.isError = true;
       });
@@ -174,10 +174,10 @@ const AuthSlice = createSlice({
       builder.addCase(resetPasswordApi.pending, (state) => {
         state.isLoading = true;
       })
-      builder.addCase(resetPasswordApi.fulfilled, (state, action) => {
+      builder.addCase(resetPasswordApi.fulfilled, (state) => {
         state.isLoading = false;
       })
-      builder.addCase(resetPasswordApi.rejected, (state, action) => {
+      builder.addCase(resetPasswordApi.rejected, (state) => {
         state.isLoading = false;
         state.isError = true;
       });

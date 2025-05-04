@@ -1,7 +1,7 @@
 import TitleScreen from "./TitleScreen";
 import PrimaryInput from "../../components/PrimaryInput";
 import MyButton from "../../components/MyButton";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 // import toast from "react-hot-toast";
 import { z } from "zod";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,7 +34,7 @@ const signUpSchema = z.object({
   }),
   });
 export default function Signup() {
-const navigate = useNavigate();
+// const navigate = useNavigate();
 const dispatch = useDispatch();
 const { isLoading } = useSelector((state: any) => state.AuthSlice);
 

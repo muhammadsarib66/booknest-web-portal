@@ -1,6 +1,6 @@
 import  { useEffect, useState } from 'react';
 import { messageIcon } from "../assets/icons";
-import { data, useNavigate, useParams } from 'react-router-dom';
+import {  useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSelectedBookApi, sendBookRequestApi, setSellerId } from '../redux/slices/BookSlice/BookSlicer';
 import Loader from '../components/Loader';
