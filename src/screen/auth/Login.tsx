@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import TitleScreen from "./TitleScreen";
 import PrimaryInput from "../../components/PrimaryInput";
 import MyButton from "../../components/MyButton";
@@ -6,6 +7,7 @@ import { z } from "zod";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { LoginApi, SendVerEmailApi } from "../../redux/slices/AuthSlice";
+import toast from "react-hot-toast";
 const signUpSchema = z.object({
   email: z
     .string()
@@ -43,11 +45,19 @@ const signUpSchema = z.object({
       signUpSchema.parse(formData);
       
       try {
-        const result = await dispatch(LoginApi(formData)).unwrap();
-          if(result) {
+        await dispatch(LoginApi(formData)).unwrap().then((result:any)=>{
+          if(result?.user?.isAdmin ==  false ){
             navigate("/")
             window.location.reload()
+          }else{
+            toast.error("You are not authorized to access this application")
           }
+        }).catch((error:any)=>{
+          console.log(error?.message , "error")
+          // toast.error(error?.message || 'error')
+        })
+        
+          
        
       } catch (error: any) {
         console.log(error?.message || 'error');

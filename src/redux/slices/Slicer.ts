@@ -43,5 +43,5 @@ const Slicer = createSlice({
    
   },
 });
-export const {} = Slicer.actions;
+// export const {} = Slicer.actions;
 export default Slicer.reducer;

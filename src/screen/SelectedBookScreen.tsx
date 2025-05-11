@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import  { useEffect, useState } from 'react';
 import { messageIcon } from "../assets/icons";
 import {  useNavigate, useParams } from 'react-router-dom';
@@ -99,6 +100,8 @@ const handleStartChat = (sellerID:any)=>{
 
    
     return (
+      <>
+
       <div className="max-w-6xl min-h-screen mx-auto p-4">
         {/* Main Book Detail Section */}
         <div className="flex flex-col md:flex-row gap-6 mb-8">
@@ -318,8 +321,9 @@ const handleStartChat = (sellerID:any)=>{
         )}
 
         {isLoading && <Loader />}
-        <Footer />
       </div>
+        <Footer />
+        </>
     );
 };
 

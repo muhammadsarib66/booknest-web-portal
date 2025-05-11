@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import TitleScreen from "./TitleScreen";
 import PrimaryInput from "../../components/PrimaryInput";
 import MyButton from "../../components/MyButton";

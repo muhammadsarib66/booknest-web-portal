@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { baseUrl } from '../../redux/slices/Slicer';
@@ -70,6 +71,7 @@ console.log(RequestBooksList, 'request books list')
         </div>
       );
     }
+else{
 
     return (
       
@@ -115,7 +117,7 @@ console.log(RequestBooksList, 'request books list')
             </div>
           </div>
           
-          {request.status === 'Pending' || request.status === "Rejected" && (
+          {request.status == 'Pending'  && (
             <div className="mt-4 flex gap-2">
               <MyButton
                 onClick={() => handleAcceptRequest({
@@ -140,6 +142,8 @@ console.log(RequestBooksList, 'request books list')
         </div>
       </div>
     );
+}
+
   };
 
   return (

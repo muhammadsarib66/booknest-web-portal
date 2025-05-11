@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import  { useEffect, useRef, useState } from 'react';
 import { searchIcon } from '../../assets/icons';
 import { baseUrl, socket } from '../../redux/slices/Slicer';
