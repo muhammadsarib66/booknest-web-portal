@@ -8,36 +8,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { LoginApi, SendVerEmailApi } from "../../redux/slices/AuthSlice";
 import toast from "react-hot-toast";
+
 const signUpSchema = z.object({
   email: z
     .string()
     .email("Invalid email address")
-    .regex(/@/, { message: "Email must contain @" }), // Ensure email contains @
-
-    password: z
+    .regex(/@/, { message: "Email must contain @" }),
+  password: z
     .string()
     .nonempty("Password is required")
     .min(8, "Password must be at least 8 characters"),
-  });
- const Login = () =>  {
-  const dispatch = useDispatch()
-   const navigate = useNavigate()
-   const {isLoading} = useSelector((state: any) => state.AuthSlice);
-   const [formData, setFormData] = useState({
-    email: "",
- password: "",
+});
 
+const Login = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isLoading } = useSelector((state: any) => state.AuthSlice);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
   });
   const [errors, setErrors] = useState({
     email: "",
- password: "",
-
+    password: "",
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    setErrors({ ...errors, [name]: "" }); // Clear error for the field being updated
+    setErrors({ ...errors, [name]: "" });
   };
 
   const handleProceed = async () => {
@@ -45,25 +44,18 @@ const signUpSchema = z.object({
       signUpSchema.parse(formData);
       
       try {
-        await dispatch(LoginApi(formData)).unwrap().then((result:any)=>{
-          console.log(result?.responseData?.user?.isadmin)
-          if(result?.responseData.user?.isadmin ==  true ){
-            console.log(result?.responseData.user?.isadmin)
-            toast.error("You are not authorized to access this application")
+        await dispatch(LoginApi(formData)).unwrap().then((result: any) => {
+          console.log(result?.responseData?.user?.isadmin);
+          if (result?.responseData.user?.isadmin == true) {
+            console.log(result?.responseData.user?.isadmin);
+            toast.error("You are not authorized to access this application");
+          } else if (result?.responseData?.user?.isadmin == false) {
+            window.location.reload();
+            navigate("/");
           }
-          else if(result?.responseData?.user?.isadmin == false ){
-            
-            window.location.reload()
-            navigate("/")
-          }
-          
-        }).catch((error:any)=>{
-          console.log(error?.message , "error")
-          // toast.error(error?.message || 'error')
-        })
-        
-          
-       
+        }).catch((error: any) => {
+          console.log(error?.message, "error");
+        });
       } catch (error: any) {
         console.log(error?.message || 'error');
       }
@@ -77,101 +69,118 @@ const signUpSchema = z.object({
       }
     }
   };
-  // const handleLogin = ()=>{
-  //   console.log('click')
-  //   localStorage.setItem("token","123456")  
-  //   window.location.href = "/"
-  //   window.location.reload()
-  // }
+
   return (
-    <div className="flex flex-col  md:flex-row h-screen md:overflow-hidden">
-      {/* Left Image Section */}
-      <span className="hidden md:contents">
-      <TitleScreen />
-      </span>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div className="flex flex-col lg:flex-row min-h-screen">
+        {/* Left Image Section - Hidden on mobile, visible on large screens */}
+        <div className="hidden lg:flex lg:w-1/2">
+          <TitleScreen />
+        </div>
 
-      {/* Right Form Section */}
-      <div className=" flex-1 flex flex-col justify-center items-center w-full md:w-1/2 p-8">
-        <div className="w-[90%] flex flex-col container mx-auto md:w-[65%] bg-white ">
-            <div className="flex flex-col gap-2">
-            <h2 className=" text-3xl font-bold text-bgPrimary">BookNest </h2>
-          <h2 className="text-3xl font-bold ">
-            Welcome Back 
-          </h2>
-          <p className="text-gray-400 text-lg font-semibold mb-6">
-          Log in to share your Books with the world
-          </p>
-          </div>
+        {/* Right Form Section */}
+        <div className="flex-1 flex flex-col justify-center items-center p-4 sm:p-6 lg:p-8 lg:w-1/2">
+          <div className="w-full max-w-md">
+            {/* Mobile Logo Section - Only visible on mobile */}
+            <div className="lg:hidden text-center mb-8">
+              <h2 className="text-4xl font-bold text-bgPrimary mb-2">BookNest</h2>
+              <div className="w-20 h-1 bg-bgPrimary mx-auto rounded-full"></div>
+            </div>
 
-          <div className="w-full flex flex-col gap-3">
-          
-          <PrimaryInput
-              label={"Email"}
-              isRequired={true}
-              onChange={handleInputChange}
-              value={formData?.email}
-              error={errors.email}
-              name="email"
-              type="email"
-                placeholder={"Enter your phone email"}
-                icon="fa-envelope"
+            {/* Form Container */}
+            <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 border border-gray-100">
+              <div className="text-center mb-8">
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
+                  Welcome Back
+                </h2>
+                <p className="text-gray-500 text-sm sm:text-base">
+                  Log in to share your Books with the world
+                </p>
+              </div>
+
+              <div className="space-y-6">
+                <PrimaryInput
+                  label="Email"
+                  isRequired={true}
+                  onChange={handleInputChange}
+                  value={formData?.email}
+                  error={errors.email}
+                  name="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  icon="fa-envelope"
                 />
-           
 
-           <PrimaryInput
-  isRequired={true}
-                label="Password"
-                onChange={handleInputChange}
-                value={formData?.password}
-                error={errors.password}
-                name="password"
+                <PrimaryInput
+                  isRequired={true}
+                  label="Password"
+                  onChange={handleInputChange}
+                  value={formData?.password}
+                  error={errors.password}
+                  name="password"
+                  type="password"
+                  placeholder="Enter password"
+                  icon="fa-lock"
+                />
 
-type="password"
-                placeholder={"Enter password"}
-                icon="fa-lock"
-              />
-           
-            <div className="space-y-3">
-              <MyButton 
-               disabled={isLoading}
-               loading={isLoading}
-                onClick={handleProceed}
-              btnText={isLoading ? "Loading..." :"Login"}  style="bg-bgPrimary py-3  text-lg capitalize" />
-              <div className="flex justify-between w-full items-center">
+                <div className="space-y-4">
+                  <MyButton
+                    disabled={isLoading}
+                    loading={isLoading}
+                    onClick={handleProceed}
+                    btnText={isLoading ? "Signing In..." : "Sign In"}
+                    style="bg-gradient-to-r from-bgPrimary to-blue-600 hover:from-blue-600 hover:to-bgPrimary py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
+                  />
 
-            <p 
-              onClick={()=>{
-                if(formData.email){
-                  dispatch(SendVerEmailApi(formData?.email))
-              }}
-              }
-            className=" font-semibold text-sm text-blue-500 cursor-pointer underline">
-              Send Verification Link
-            </p>
-            <p className=" font-semibold text-sm">
-              <Link to="/reset-password" className="text-blue-500 ">
-              Forget Password?
-              </Link>
-            </p>
+                  <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-0 text-sm">
+                    <button
+                      onClick={() => {
+                        if (formData.email) {
+                          dispatch(SendVerEmailApi(formData?.email));
+                        }
+                      }}
+                      className="font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200 underline decoration-2 underline-offset-2"
+                    >
+                      Send Verification Link
+                    </button>
+                    <Link
+                      to="/reset-password"
+                      className="font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200 underline decoration-2 underline-offset-2"
+                    >
+                      Forget Password?
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="flex items-center my-6">
+                  <hr className="flex-grow border-gray-300" />
+                  <span className="mx-4 text-gray-500 font-medium">OR</span>
+                  <hr className="flex-grow border-gray-300" />
+                </div>
+
+                <div className="text-center">
+                  <p className="text-gray-600 font-medium">
+                    Don't have an Account?{" "}
+                    <Link
+                      to="/signup"
+                      className="text-blue-600 hover:text-blue-800 font-semibold underline decoration-2 underline-offset-2 transition-colors duration-200"
+                    >
+                      Sign Up
+                    </Link>
+                  </p>
+                </div>
+              </div>
             </div>
 
+            {/* Footer for mobile */}
+            <div className="lg:hidden text-center mt-8 text-xs text-gray-500">
+              © 2024 BookNest. All rights reserved.
             </div>
-            <div className="flex items-center my-4">
-            <hr className="flex-grow border-gray-300" />
-            <span className="mx-2 text-gray-500">OR</span>
-            <hr className="flex-grow border-gray-300" />
-          </div>
-          <p className="text-center font-semibold text-sm">
-              Don't have an Account ?{" "}
-              <Link to="/signup" className="text-blue-500 underline">
-                Sign Up
-              </Link>
-            </p>
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Login;

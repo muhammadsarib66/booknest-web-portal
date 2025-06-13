@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import SignUpForm from './screen/auth/SignUpForm'
 import { Route, Routes } from 'react-router-dom';
 import Login from './screen/auth/Login';
@@ -37,7 +40,7 @@ const notiSound = new Audio(notificationsound);
       socket.on('receive_notification', (data: any) => {
         console.log(data, "notification data");
           notiSound.play();
-          let userName = (data?.sender?._id == userDetail?._id) ? data?.receiver?.firstname : data?.sender?.firstname;
+          let userName  = (data?.sender?._id == userDetail?._id) ? data?.receiver?.firstname : data?.sender?.firstname;
         console.log(userName, "userName");
           toast.success(`${data?.message} from ${userName         }`, )
         
