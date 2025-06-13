@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { io } from "socket.io-client";
 
 // export const baseUrl = "http://192.168.100.110:3000/";
-export const baseUrl = "https://book-nest-backend-production.up.railway.app/";
+export const baseUrl = "https://booknestbackend-production.up.railway.app/";
 // export const baseUrl = "http://192.168.100.19:3000/";
 // export const baseUrl = "https://awake-smile-production.up.railway.app/";
 // export const baseUrl = "https://book-nest-backend-mu.vercel.app/";

@@ -46,11 +46,16 @@ const signUpSchema = z.object({
       
       try {
         await dispatch(LoginApi(formData)).unwrap().then((result:any)=>{
-          if(result?.user?.isadmin ==  true ){
+          console.log(result?.responseData?.user?.isadmin)
+          if(result?.responseData.user?.isadmin ==  true ){
+            console.log(result?.responseData.user?.isadmin)
             toast.error("You are not authorized to access this application")
           }
+          else if(result?.responseData?.user?.isadmin == false ){
+            
             window.location.reload()
             navigate("/")
+          }
           
         }).catch((error:any)=>{
           console.log(error?.message , "error")
