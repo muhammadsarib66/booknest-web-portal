@@ -18,6 +18,9 @@ const ChatScreen = () => {
   const [showChat, setShowChat] = useState<boolean>(false); // For mobile view toggle
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [newMessage, setNewMessage] = useState<string>('');
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [showImagePreview, setShowImagePreview] = useState<boolean>(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Sort chat rooms by last message time (newest first)
   const sortChatRooms = (rooms: any[]) => {
@@ -52,16 +55,55 @@ const ChatScreen = () => {
     setSelectedRoom(null);
   };
 
-  const handleSendMessage = () => {
-    if (!newMessage.trim() || !selectedRoom || !userDetail) return;
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) { // 2MB limit
+        alert('Image size should be less than 2MB');
+        return;
+      }
+      setSelectedImage(file);
+      setShowImagePreview(true);
+    }
+  };
 
-    socket.emit('send_message', {
-      senderId: userDetail?._id,
-      receiverId: selectedRoom?.otherUser?._id,
-      message: newMessage
-    });
+  const handleCancelImage = () => {
+    setSelectedImage(null);
+    setShowImagePreview(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleSendMessage = () => {
+    if ((!newMessage.trim() && !selectedImage) || !selectedRoom || !userDetail) return;
+
+    if (selectedImage) {
+      // Convert image to base64
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        socket.emit('send_message', {
+          senderId: userDetail?._id,
+          receiverId: selectedRoom?.otherUser?._id,
+          message: newMessage.trim(),
+          image: reader.result
+        });
+        setSelectedImage(null);
+        setShowImagePreview(false);
+      };
+      reader.readAsDataURL(selectedImage);
+    } else {
+      socket.emit('send_message', {
+        senderId: userDetail?._id,
+        receiverId: selectedRoom?.otherUser?._id,
+        message: newMessage
+      });
+    }
 
     setNewMessage('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   // Scroll to bottom of messages
@@ -277,7 +319,18 @@ const ChatScreen = () => {
                     <div key={index} className="flex justify-end mb-3 sm:mb-4">
                       <div className="flex flex-col max-w-[85%] sm:max-w-[70%]">
                         <div className="bg-bgPrimary text-white rounded-2xl rounded-br-md p-3 shadow-sm">
-                          <p className="text-sm sm:text-base break-words">{message?.message}</p>
+                          {message?.image && (
+                            <img 
+                              src={baseUrl+ message.image} 
+                              alt="Sent" 
+                              className="w-36 h-36 object-cover rounded-lg mb-2"
+                              onClick={() => window.open(message.image, '_blank')}
+                              style={{ cursor: 'pointer' }}
+                            />
+                          )}
+                          {message?.message && (
+                            <p className="text-sm sm:text-base break-words">{message?.message}</p>
+                          )}
                         </div>
                         <span className="text-xs text-gray-500 mt-1 text-right">
                           {moment(message?.createdAt).format('HH:mm')}
@@ -315,7 +368,18 @@ const ChatScreen = () => {
                       </div>
                       <div className="flex flex-col max-w-[85%] sm:max-w-[70%]">
                         <div className="bg-white rounded-2xl rounded-bl-md p-3 shadow-sm border border-gray-100">
-                          <p className="text-sm sm:text-base text-gray-700 break-words">{message?.message}</p>
+                          {message?.image && (
+                            <img 
+                              src={baseUrl + message.image} 
+                              alt="Received" 
+                              className="w-36 h-36 object-cover rounded-lg mb-2"
+                              onClick={() => window.open(message.image, '_blank')}
+                              style={{ cursor: 'pointer' }}
+                            />
+                          )}
+                          {message?.message && (
+                            <p className="text-sm sm:text-base text-gray-700 break-words">{message?.message}</p>
+                          )}
                         </div>
                         <span className="text-xs text-gray-500 mt-1">
                           {moment(message?.createdAt).format('HH:mm')}
@@ -338,6 +402,23 @@ const ChatScreen = () => {
 
             {/* Chat Input - Fixed */}
             <footer className="p-3 sm:p-4 border-t border-gray-300 bg-white">
+              {showImagePreview && selectedImage && (
+                <div className="mb-3 relative inline-block">
+                  <div className="relative">
+                    <img 
+                      src={URL.createObjectURL(selectedImage)} 
+                      alt="Selected" 
+                      className="max-h-32 rounded-lg border border-gray-200"
+                    />
+                    <button 
+                      onClick={handleCancelImage}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+                    >
+                      <i className="fas fa-times text-xs"></i>
+                    </button>
+                  </div>
+                </div>
+              )}
               <div className="flex items-center space-x-2">
                 <div className="flex-1 flex items-center bg-gray-100 rounded-full px-4 py-2">
                   <input
@@ -348,18 +429,28 @@ const ChatScreen = () => {
                     placeholder="Type a message..."
                     className="flex-1 bg-transparent focus:outline-none text-sm sm:text-base"
                   />
-                  <button className="ml-2 p-1 hover:bg-gray-200 rounded-full transition-colors">
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    accept="image/*"
+                    onChange={handleImageSelect}
+                    className="hidden"
+                  />
+                  <button 
+                    onClick={() => fileInputRef.current?.click()}
+                    className="ml-2 p-1 hover:bg-gray-200 rounded-full transition-colors"
+                  >
                     <i className="fas fa-paperclip text-gray-500"></i>
                   </button>
                 </div>
                 <button
                   onClick={handleSendMessage}
                   className={`p-3 rounded-full transition-all ${
-                    newMessage.trim()
+                    newMessage.trim() || selectedImage
                       ? 'bg-bgPrimary text-white hover:bg-blue-600 shadow-lg'
                       : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                   }`}
-                  disabled={!newMessage.trim()}
+                  disabled={!newMessage.trim() && !selectedImage}
                 >
                   <i className="fas fa-paper-plane text-sm"></i>
                 </button>
