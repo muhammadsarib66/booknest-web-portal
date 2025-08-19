@@ -7,7 +7,7 @@ const HeroSection = () => {
       <div>
         <img src={heroImg} alt="hero" className="w-full h-full object-cover" />
       </div>
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+      <div className=" absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <h1 className="text-3xl md:text-5xl font-bold">
           <ReactTyped
             strings={["Discover", "Exchange", "Share"]}

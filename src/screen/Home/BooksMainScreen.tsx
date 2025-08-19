@@ -4,14 +4,17 @@ import BookHomeScreen from "../BookHomeScreen";
 
 const BooksMainScreen = () => {
   return (
-   <div>
-    <HeroSection/>
-    <div className="my-10 mx-10">
-
-    <BookHomeScreen />
-   </div>
-   <Footer />
-   </div>
+    <div className="min-h-screen bg-gradient-to-br from-secondary-50 via-white to-primary-50/20">
+      <HeroSection />
+      
+      <main className="container-responsive section-padding">
+        <div className="animate-fade-in">
+          <BookHomeScreen />
+        </div>
+      </main>
+      
+      <Footer />
+    </div>
   );
 };
 
