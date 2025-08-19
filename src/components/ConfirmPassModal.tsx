@@ -10,7 +10,8 @@ const ConfirmPassModal = ({ open, onClose }:any) => {
       <div className="bg-white w-[420px] rounded-lg p-5 shadow-lg text-center">
         {/* Success Icon */}
         <div className="flex justify-center mb-3">
-          <img src={verifyIcon} className="h-24 w-24" alt="" />
+          <img src={verifyIcon} className="h-24 w-24" alt="" 
+          />
 
         </div>
 

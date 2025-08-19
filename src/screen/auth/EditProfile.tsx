@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import PrimaryInput from '../../components/PrimaryInput'
 import MyButton from '../../components/MyButton';
 import { Avatar } from '@material-tailwind/react';
-// import { userImg } from '../../assets/icons';
 import Loader from '../../components/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { ChangePassApi, updateUserProfileApi } from '../../redux/slices/UpdateProfileSlice';
@@ -195,178 +194,201 @@ const EditProfile = () => {
   };
 
   return (
-    <div className='min-h-screen flex justify-center py-12'>
-      <div className="w-[90%] flex flex-col container mx-auto md:w-[55%] bg-white">
-        <div className="flex flex-col gap-2">
-          <h2 className="text-2xl font-bold mb-2">
-            Edit Your Profile
-          </h2>
-        </div>
-        
-        {/* Profile Image Section */}
-        <div className='relative w-fit'>
-          <Avatar
-            onPointerLeaveCapture={''}
-            onPointerEnterCapture={''}
-            placeholder={''}
-            className='border-2 border-bgPrimary object-cover' 
-            size="xxl" 
-            src={getAvatarSrc()} 
-          />
-          <div 
-            onClick={triggerFileInput} 
-            className='absolute bottom-0 -right-2 w-10 border shadow-sm cursor-pointer h-10 flex items-center justify-center bg-white rounded-full p-2'
-          >
-            <i className='fa-solid fa-camera text-black text-2xl cursor-pointer'></i>
-          </div>
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleImageChange}
-            accept="image/*"
-            className="hidden"
-          />
-        </div>
-
-        {/* Profile Information Form */}
-        <div className="w-full flex flex-col gap-3">
-          <div className="flex w-full gap-4">
-            <div className="flex-1">
-              <PrimaryInput
-                value={profile.firstName}
-                onChange={handleChange}
-                name="firstName"
-                label="First Name"
-                type="text"
-                placeholder="Enter your First Name"
-                icon="fa-user"
-                error={errors.firstName}
-              />
-            </div>
-            <div className="flex-1">
-              <PrimaryInput
-                value={profile.lastName}
-                onChange={handleChange}
-                name="lastName"
-                label="Last Name"
-                type="text"
-                placeholder="Enter your last Name"
-                icon="fa-user"
-                error={errors.lastName}
-              />
-            </div>
-          </div>
-          <div className="flex w-full gap-4">
-            <div className="flex-1">
-              <PrimaryInput
-                value={profile.email}
-                name="email"
-                disabled={true}
-                label="Email"
-                type="email"
-                placeholder="Enter your email"
-                icon="fa-envelope"
-              />
-            </div>
-            <div className="flex-1">
-              <PrimaryInput
-                value={profile.phone}
-                onChange={handleChange}
-                name="phone"
-                label="Phone"
-                type="text"
-                placeholder="Enter your phone Number"
-                icon="fa-phone"
-                error={errors.phone}
-              />
-            </div>
-          </div>
-          
-          <div className="space-y-3 w-fit">
-            <MyButton
-              onClick={handleSubmit}
-              btnText="Save Changes"
-              loading={isLoading}
-              style="bg-bgPrimary py-2 text-lg px-20 py-3 capitalize"
-            />
-          </div>
-          
-          {/* Password Change Section */}
-          <div>
-            <h2 className="text-lg font-bold mb-2 mt-4">
-              Change Password
-            </h2>
-            {!showPasswordFields ? (
-              <button
-                onClick={() => setShowPasswordFields(true)}
-                className="text-bgPrimary hover:underline flex items-center gap-1"
-              >
-                Change Password <CgArrowLongRight className="text-xl" />
-              </button>
-            ) : (
-              <div className="space-y-3">
-                <PrimaryInput
-                  value={profile.oldpassword}
-                  onChange={handleChange}
-                  name="oldpassword"
-                  label="Current Password"
-                  type="password"
-                  placeholder="Enter current password"
-                  icon="fa-lock"
-                  error={errors.oldpassword}
-                />
-
-                <PrimaryInput
-                  value={profile.newpassword}
-                  onChange={handleChange}
-                  name="newpassword"
-                  label="New Password"
-                  type="password"
-                  placeholder="Enter new password"
-                  icon="fa-lock"
-                  error={errors.newpassword}
-                />
-
-                <PrimaryInput
-                  value={profile.confirmPassword}
-                  onChange={handleChange}
-                  name="confirmPassword"
-                  label="Confirm New Password"
-                  type="password"
-                  placeholder="Confirm new password"
-                  icon="fa-lock"
-                  error={errors.confirmPassword}
-                />
-
-                <div className="flex gap-3">
-                  <MyButton
-                    onClick={handleUpdatePassword}
-                    btnText="Update Password"
-                    loading={isLoading}
-                    style="bg-bgPrimary py-2 text-lg px-8 py-3 capitalize"
+    <div className='min-h-screen bg-gradient-to-br from-secondary-50 via-white to-primary-50/20 py-8 lg:py-12'>
+      <div className="container-responsive">
+        <div className="max-w-2xl mx-auto">
+          <div className="animate-fade-in">
+            <div className="bg-white rounded-3xl shadow-soft p-6 lg:p-8">
+              {/* Header */}
+              <div className="text-center mb-8">
+                <h1 className="heading-1 text-secondary-900 mb-2">
+                  Edit Your Profile
+                </h1>
+                <p className="body-medium text-secondary-600">
+                  Update your personal information and preferences
+                </p>
+              </div>
+              
+              {/* Profile Image Section */}
+              <div className='flex justify-center mb-8'>
+                <div className='relative'>
+                  <Avatar
+                    onPointerLeaveCapture={''}
+                    onPointerEnterCapture={''}
+                    placeholder={''}
+                    className='border-4 border-primary-200 object-cover shadow-lg' 
+                    size="xxl" 
+                    src={getAvatarSrc()} 
                   />
-                  <button
-                    onClick={() => {
-                      setShowPasswordFields(false);
-                      setErrors({});
-                      setProfile({
-                        ...profile,
-                        oldpassword: "",
-                        newpassword: "",
-                        confirmPassword: "",
-                      });
-                    }}
-                    className="text-gray-600 hover:text-gray-800 px-4 py-2"
+                  <button 
+                    onClick={triggerFileInput} 
+                    className='absolute -bottom-2 -right-2 w-12 h-12 bg-white border-2 border-primary-300 shadow-lg cursor-pointer rounded-full p-2 hover:border-primary-400 hover:shadow-xl transition-all duration-300'
                   >
-                    Cancel
+                    <i className='fa-solid fa-camera text-primary-600 text-xl'></i>
                   </button>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleImageChange}
+                    accept="image/*"
+                    className="hidden"
+                  />
                 </div>
               </div>
-            )}
+
+              {/* Profile Information Form */}
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div>
+                    <PrimaryInput
+                      value={profile.firstName}
+                      onChange={handleChange}
+                      name="firstName"
+                      label="First Name"
+                      type="text"
+                      placeholder="Enter your First Name"
+                      icon="fa-user"
+                      error={errors.firstName}
+                    />
+                  </div>
+                  <div>
+                    <PrimaryInput
+                      value={profile.lastName}
+                      onChange={handleChange}
+                      name="lastName"
+                      label="Last Name"
+                      type="text"
+                      placeholder="Enter your last Name"
+                      icon="fa-user"
+                      error={errors.lastName}
+                    />
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div>
+                    <PrimaryInput
+                      value={profile.email}
+                      name="email"
+                      disabled={true}
+                      label="Email"
+                      type="email"
+                      placeholder="Enter your email"
+                      icon="fa-envelope"
+                    />
+                  </div>
+                  <div>
+                    <PrimaryInput
+                      value={profile.phone}
+                      onChange={handleChange}
+                      name="phone"
+                      label="Phone"
+                      type="text"
+                      placeholder="Enter your phone Number"
+                      icon="fa-phone"
+                      error={errors.phone}
+                    />
+                  </div>
+                </div>
+                
+                {/* Save Changes Button */}
+                <div className="flex justify-center pt-4">
+                  <MyButton
+                    onClick={handleSubmit}
+                    btnText="Save Changes"
+                    loading={isLoading}
+                    style="btn-primary px-12 py-4 text-lg"
+                  />
+                </div>
+                
+                {/* Password Change Section */}
+                <div className="border-t border-secondary-200 pt-8">
+                  <div className="text-center mb-6">
+                    <h2 className="heading-3 text-secondary-900 mb-2">
+                      Change Password
+                    </h2>
+                    <p className="body-medium text-secondary-600">
+                      Update your password to keep your account secure
+                    </p>
+                  </div>
+                  
+                  {!showPasswordFields ? (
+                    <div className="text-center">
+                      <button
+                        onClick={() => setShowPasswordFields(true)}
+                        className="btn-secondary inline-flex items-center gap-2 px-8 py-3"
+                      >
+                        Change Password <CgArrowLongRight className="text-xl" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="space-y-6 max-w-md mx-auto">
+                      <PrimaryInput
+                        value={profile.oldpassword}
+                        onChange={handleChange}
+                        name="oldpassword"
+                        label="Current Password"
+                        type="password"
+                        placeholder="Enter current password"
+                        icon="fa-lock"
+                        error={errors.oldpassword}
+                      />
+
+                      <PrimaryInput
+                        value={profile.newpassword}
+                        onChange={handleChange}
+                        name="newpassword"
+                        label="New Password"
+                        type="password"
+                        placeholder="Enter new password"
+                        icon="fa-lock"
+                        error={errors.newpassword}
+                      />
+
+                      <PrimaryInput
+                        value={profile.confirmPassword}
+                        onChange={handleChange}
+                        name="confirmPassword"
+                        label="Confirm New Password"
+                        type="password"
+                        placeholder="Confirm new password"
+                        icon="fa-lock"
+                        error={errors.confirmPassword}
+                      />
+
+                      <div className="flex flex-col sm:flex-row gap-3 pt-4">
+                        <MyButton
+                          onClick={handleUpdatePassword}
+                          btnText="Update Password"
+                          loading={isLoading}
+                          style="btn-primary flex-1"
+                        />
+                        <button
+                          onClick={() => {
+                            setShowPasswordFields(false);
+                            setErrors({});
+                            setProfile({
+                              ...profile,
+                              oldpassword: "",
+                              newpassword: "",
+                              confirmPassword: "",
+                            });
+                          }}
+                          className="btn-ghost flex-1"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      {isLoading || updateLoading && <Loader />}
+      
+      {(isLoading || updateLoading) && <Loader />}
     </div>
   )
 }
