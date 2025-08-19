@@ -173,6 +173,9 @@ const Navbar = () => {
             </button>
             <button onClick={() => setIsMobileMenuOpen(true)}>
               <Avatar 
+              onError={(e:any)=>{
+                e.target.src = userImg2;
+              }}
                 placeholder={''}
                 onPointerEnterCapture={''}
                 onPointerLeaveCapture={''}
